@@ -177,6 +177,9 @@
   //  6. Marcação semântica: <header>/<main> como landmarks, <output>
   //     para o visor (em vez de <input readonly>) e aria-label em
   //     cada botão simbólico, para leitores de tela.
+  //  7. Suporte a teclado físico (incluindo NumPad), reaproveitando
+  //     as mesmas funções digitar/apagarUltimo/limparTudo/calcular
+  //     que os botões usam — nenhuma lógica duplicada.
   // -----------------------------------------------------------------
 
   const visor = document.getElementById("visor");
@@ -284,6 +287,33 @@
       if (action === "backspace") return apagarUltimo();
       if (action === "equals") return calcular();
     });
+  });
+
+  // Suporte a teclado físico, incluindo o teclado numérico (NumPad).
+  // O navegador já normaliza as teclas do NumPad para os mesmos
+  // valores de e.key ("7", "+", "." etc.), então não é preciso
+  // tratar e.code separadamente.
+  const TECLAS_VALOR = new Set(["0","1","2","3","4","5","6","7","8","9",".","+","-","*","/","%"]);
+
+  document.addEventListener("keydown", (e) => {
+    if (TECLAS_VALOR.has(e.key)) {
+      e.preventDefault();
+      return digitar(e.key);
+    }
+
+    switch (e.key) {
+      case "Enter":
+      case "=":
+        e.preventDefault();
+        return calcular();
+      case "Backspace":
+        e.preventDefault();
+        return apagarUltimo();
+      case "Escape":
+      case "Delete":
+        e.preventDefault();
+        return limparTudo();
+    }
   });
 
   atualizaVisor();
