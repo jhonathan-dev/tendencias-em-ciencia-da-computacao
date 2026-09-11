@@ -168,3 +168,93 @@ Como o slide reforça: a IA sugeriu a estrutura do parser, o uso de
    mostra `Erro: ÷0` e fica destacado em vermelho.
 3. Compare o código-fonte de cada arquivo (é só abrir com um editor de
    texto) lado a lado com as seções 4 e 5 acima.
+
+## 8. Etapa 2: o prompt estruturado usado
+
+Seguindo o template pedido na atividade, este foi o prompt construído para
+gerar a refatoração da calculadora:
+
+```
+PAPEL: Desenvolvedor front-end sênior, especialista em JavaScript
+vanilla, acessibilidade web e boas práticas de segurança.
+
+CONTEXTO: Existe uma calculadora simples de quatro operações em
+HTML/CSS/JS, feita de forma propositalmente ingênua (versão "Antes"),
+para servir de base de comparação numa atividade sobre refatoração
+assistida por IA.
+
+PROBLEMA: A versão atual usa eval() para calcular expressões, guarda o
+estado em uma variável global, liga os botões via onclick inline, não
+trata divisão por zero, usa <input readonly> no lugar de um elemento
+semântico para o visor e só aceita clique de mouse (sem suporte a
+teclado físico ou NumPad).
+
+ENTRADA: O arquivo HTML da versão "Antes" (calculadora_base.html), com
+a interface e a lógica completas.
+
+SAÍDA ESPERADA: Um único arquivo HTML autocontido (HTML + CSS + JS),
+com a mesma interface visual da versão original, porém com o código
+refatorado: sem eval(), com tratamento de divisão por zero, estado
+organizado, marcação semântica e suporte a teclado (incluindo NumPad).
+
+LINGUAGEM: HTML5, CSS3 e JavaScript (ES6+), sem frameworks ou
+bibliotecas externas.
+
+RESTRIÇÕES:
+- Não usar eval() nem qualquer execução de código arbitrário.
+- Não alterar a aparência visual da calculadora.
+- Não usar bibliotecas externas nem chamadas de rede.
+- Manter tudo em um único arquivo .html.
+
+CRITÉRIOS DE QUALIDADE:
+- Nenhuma variável global solta; estado isolado em um objeto.
+- Funções pequenas, nomeadas e com responsabilidade única.
+- Uso de marcação semântica (header, main, output, aria-label) em vez
+  de apenas <div>.
+- Delegação de eventos em vez de onclick inline.
+- Tratamento explícito de erros, com mensagem visível ao usuário.
+
+CASOS DE TESTE:
+- 2 + 3 * 4 deve resultar em 14 (respeitando precedência).
+- 10 - 2 - 3 deve resultar em 5.
+- 5 / 0 deve mostrar uma mensagem de erro, não Infinity.
+- Digitar pelos números do teclado físico e do NumPad deve funcionar
+  igual a clicar nos botões.
+- Enter deve calcular; Backspace deve apagar o último dígito; Escape
+  deve limpar tudo.
+```
+
+## 9. Etapa 3: checklist de verificação do código gerado
+
+Antes de aceitar o código gerado pela IA como versão final, respondi ao
+checklist da atividade com base no que foi efetivamente entregue:
+
+- [x] **Eu compreendo o código?** Sim. Cada função tem uma única
+  responsabilidade (`digitar`, `apagarUltimo`, `limparTudo`,
+  `calcularExpressao`, `aplicarOperador`, `atualizaVisor`), o que tornou
+  fácil ler e explicar cada trecho (ver seção 4).
+- [x] **O código atende ao problema definido?** Sim. A calculadora
+  continua fazendo as quatro operações básicas, com a mesma interface,
+  mas agora sem os problemas listados no PROBLEMA do prompt.
+- [x] **Há bibliotecas que eu não conheço?** Não. O código usa apenas
+  APIs nativas do navegador (DOM, `addEventListener`, expressões
+  regulares), sem nenhuma dependência externa.
+- [x] **Há operações que podem apagar ou sobrescrever dados?** Não se
+  aplica diretamente: a calculadora não lê nem grava nada fora da
+  própria página (não usa `localStorage`, cookies ou requisições de
+  rede), então não há risco de apagar dados do usuário.
+- [ ] **O código utiliza dados sensíveis?** Não. Não há coleta, envio
+  ou armazenamento de nenhuma informação do usuário.
+- [x] **Há tratamento de erros?** Sim, e esse foi um dos pontos centrais
+  da refatoração: divisão por zero e expressões inválidas são
+  capturadas em `try/catch` e mostradas como mensagem de erro no visor,
+  em vez de gerar `Infinity`/`NaN` silenciosamente.
+- [x] **Consigo explicar cada função ou bloco principal?** Sim, estão
+  documentadas na seção 4 deste documento, função por função.
+- [x] **Existem casos que o código não considera?** Sim, alguns
+  conscientemente fora de escopo para uma calculadora "nível básico":
+  não há suporte a parênteses, não há histórico de operações anteriores
+  e o resultado é arredondado em 10 casas decimais (`toFixed(10)`), o
+  que pode gerar pequenas imprecisões em contas com muitas casas
+  decimais. Nada disso compromete o objetivo da atividade, mas fica
+  registrado aqui como limitação conhecida.
