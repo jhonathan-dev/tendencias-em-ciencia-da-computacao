@@ -1,4 +1,4 @@
-# Atividade Prática — Calculadora Simples (Nível Básico)
+# Atividade Prática: Calculadora Simples (Nível Básico)
 
 Disciplina: Programação Assistida por Inteligência Artificial
 Projeto escolhido no menu: **Calculadora Simples** (Nível Básico)
@@ -11,7 +11,7 @@ significa:
 
 1. Construir uma versão funcional, porém ingênua, do projeto ("Antes").
 2. Usar a IA para revisar, criticar e refatorar esse código ("Depois").
-3. Documentar o que mudou e por quê — porque quem assina o commit é o
+3. Documentar o que mudou e por quê, porque quem assina o commit é o
    humano, não a IA.
 
 Este pacote entrega os dois códigos completos (HTML + CSS + JS em cada
@@ -25,13 +25,13 @@ arquivo) e esta explicação.
 | `calculadora_refatorada.html` | Versão "Depois": mesma interface, código revisado e mais seguro. |
 | `EXPLICACAO.md` | Este documento. |
 
-Ambos os arquivos são independentes — basta abrir cada `.html` no navegador,
+Ambos os arquivos são independentes. Basta abrir cada `.html` no navegador;
 não precisam de servidor nem de instalação.
 
 ## 3. O ciclo de colaboração Humano-IA aplicado aqui
 
-Seguindo o ciclo do slide (Contextualizar & Sugerir → Avaliar Criticamente →
-Refatorar & Ajustar → Decidir & Integrar):
+Seguindo o ciclo do slide (Contextualizar & Sugerir, Avaliar Criticamente,
+Refatorar & Ajustar, Decidir & Integrar):
 
 1. **Contextualizar & Sugerir**: pedi um primeiro rascunho de calculadora
    funcional em HTML/CSS/JS.
@@ -49,7 +49,7 @@ Refatorar & Ajustar → Decidir & Integrar):
 ### 4.1 Uso de `eval()`
 
 - **Base**: usa `eval(expressao)` para calcular o resultado. Isso funciona,
-  mas é uma prática arriscada — `eval` executa qualquer código JavaScript
+  mas é uma prática arriscada: `eval` executa qualquer código JavaScript
   que estiver na string, o que é uma porta aberta para bugs e, em um
   contexto real (input vindo de um usuário ou servidor), para
   vulnerabilidades de segurança.
@@ -70,8 +70,8 @@ Refatorar & Ajustar → Decidir & Integrar):
 ### 4.3 Organização do estado
 
 - **Base**: usa uma variável global solta (`var expressao`), manipulada
-  diretamente por várias funções — fácil de perder o controle conforme o
-  projeto cresce.
+  diretamente por várias funções, o que torna fácil perder o controle
+  conforme o projeto cresce.
 - **Refatorada**: o estado vive dentro de um único objeto (`estado`), com
   um campo para a expressão atual e outro para sinalizar erro. Isso deixa
   claro, em um só lugar, tudo que descreve "o que a calculadora está
@@ -97,6 +97,44 @@ Refatorar & Ajustar → Decidir & Integrar):
   isoladamente (como fizemos ao validar a lógica de cálculo antes de
   integrá-la à interface).
 
+### 4.6 HTML semântico
+
+A versão refatorada foi ajustada para usar marcação semântica em vez de
+`<div>`s genéricos para tudo:
+
+- `<header>` envolve o título e o subtítulo da calculadora.
+- `<main aria-label="Calculadora simples">` é o landmark principal da página.
+- O visor deixou de ser um `<input readonly>` e passou a ser um
+  `<output id="visor" for="teclado">`, que é o elemento correto do HTML para
+  "o resultado de um cálculo feito por outros controles", exatamente o
+  papel que ele cumpre aqui.
+- O teclado de botões ganhou um `<div role="group" aria-label="Teclado da
+  calculadora">` envolvendo as linhas, e cada botão simbólico (`÷`, `×`,
+  `−`, `+`, `=`, `%`, `⌫`, `C`) recebeu um `aria-label` descritivo, para
+  que leitores de tela anunciem "Dividir" em vez de apenas o símbolo `÷`.
+
+Isso não muda o comportamento visual nem a lógica de cálculo. É apenas uma
+melhoria de acessibilidade e de significado da estrutura, sem tocar no
+"Depois" que já tínhamos validado.
+
+### 4.7 Digitação pelo teclado físico (incluindo NumPad)
+
+A versão refatorada também passou a escutar `keydown` no `document`,
+mapeando:
+
+- `0`–`9`, `.`, `+`, `-`, `*`, `/`, `%` → `digitar(...)`
+- `Enter` ou `=` → `calcular()`
+- `Backspace` → `apagarUltimo()`
+- `Escape` ou `Delete` → `limparTudo()`
+
+O navegador já normaliza as teclas do teclado numérico (NumPad) para os
+mesmos valores de `e.key` das teclas normais (`"7"`, `"+"`, `"."` etc.).
+Por isso não foi preciso nenhum tratamento especial para o NumPad; ele
+funciona automaticamente assim que o teclado normal funciona. O ponto
+importante aqui é que **nenhuma lógica foi duplicada**: as teclas chamam
+exatamente as mesmas funções (`digitar`, `apagarUltimo`, `limparTudo`,
+`calcular`) que os botões de clique já usavam.
+
 ## 5. Prompts usados como referência (cheat sheet aplicado)
 
 Seguindo o "Roteiro de Prompts" do slide, os prompts usados para chegar na
@@ -118,53 +156,15 @@ Como o slide reforça: a IA sugeriu a estrutura do parser, o uso de
   versões, para que a comparação fosse justa (só o código muda).
 - Validar manualmente os cálculos (incluindo o caso de borda da divisão por
   zero) antes de aceitar a refatoração como correta.
-- Garantir que nenhuma regra de negócio fosse perdida no processo — aqui,
-  a regra é simples ("uma calculadora básica de quatro operações"), mas em
+- Garantir que nenhuma regra de negócio fosse perdida no processo. Aqui a
+  regra é simples ("uma calculadora básica de quatro operações"), mas em
   projetos reais essa validação de contexto é o papel que a IA não cobre.
-
-### 4.6 HTML semântico
-
-A versão refatorada foi ajustada para usar marcação semântica em vez de
-`<div>`s genéricos para tudo:
-
-- `<header>` envolve o título e o subtítulo da calculadora.
-- `<main aria-label="Calculadora simples">` é o landmark principal da página.
-- O visor deixou de ser um `<input readonly>` e passou a ser um
-  `<output id="visor" for="teclado">`, que é o elemento correto do HTML para
-  "o resultado de um cálculo feito por outros controles" — exatamente o
-  papel que ele cumpre aqui.
-- O teclado de botões ganhou um `<div role="group" aria-label="Teclado da
-  calculadora">` envolvendo as linhas, e cada botão simbólico (`÷`, `×`,
-  `−`, `+`, `=`, `%`, `⌫`, `C`) recebeu um `aria-label` descritivo, para
-  que leitores de tela anunciem "Dividir" em vez de apenas o símbolo `÷`.
-
-Isso não muda o comportamento visual nem a lógica de cálculo — é uma
-melhoria de acessibilidade e de significado da estrutura, sem tocar no
-"Depois" que já tínhamos validado.
-
-### 4.7 Digitação pelo teclado físico (incluindo NumPad)
-
-A versão refatorada também passou a escutar `keydown` no `document`,
-mapeando:
-
-- `0`–`9`, `.`, `+`, `-`, `*`, `/`, `%` → `digitar(...)`
-- `Enter` ou `=` → `calcular()`
-- `Backspace` → `apagarUltimo()`
-- `Escape` ou `Delete` → `limparTudo()`
-
-O navegador já normaliza as teclas do teclado numérico (NumPad) para os
-mesmos valores de `e.key` das teclas normais (`"7"`, `"+"`, `"."` etc.),
-então não foi preciso nenhum tratamento especial para o NumPad — ele
-funciona automaticamente assim que o teclado normal funciona. O ponto
-importante aqui é que **nenhuma lógica foi duplicada**: as teclas chamam
-exatamente as mesmas funções (`digitar`, `apagarUltimo`, `limparTudo`,
-`calcular`) que os botões de clique já usavam.
 
 ## 7. Como testar
 
-1. Abra `calculadora_base.html` no navegador e teste, por exemplo, `5 / 0`
-   — repare que o resultado não é tratado.
-2. Abra `calculadora_refatorada.html` e repita o mesmo teste — o visor
+1. Abra `calculadora_base.html` no navegador e teste, por exemplo, `5 / 0`.
+   Repare que o resultado não é tratado.
+2. Abra `calculadora_refatorada.html` e repita o mesmo teste. O visor
    mostra `Erro: ÷0` e fica destacado em vermelho.
 3. Compare o código-fonte de cada arquivo (é só abrir com um editor de
    texto) lado a lado com as seções 4 e 5 acima.
