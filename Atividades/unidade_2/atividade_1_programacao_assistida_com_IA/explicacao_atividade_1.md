@@ -142,6 +142,24 @@ Isso não muda o comportamento visual nem a lógica de cálculo — é uma
 melhoria de acessibilidade e de significado da estrutura, sem tocar no
 "Depois" que já tínhamos validado.
 
+### 4.7 Digitação pelo teclado físico (incluindo NumPad)
+
+A versão refatorada também passou a escutar `keydown` no `document`,
+mapeando:
+
+- `0`–`9`, `.`, `+`, `-`, `*`, `/`, `%` → `digitar(...)`
+- `Enter` ou `=` → `calcular()`
+- `Backspace` → `apagarUltimo()`
+- `Escape` ou `Delete` → `limparTudo()`
+
+O navegador já normaliza as teclas do teclado numérico (NumPad) para os
+mesmos valores de `e.key` das teclas normais (`"7"`, `"+"`, `"."` etc.),
+então não foi preciso nenhum tratamento especial para o NumPad — ele
+funciona automaticamente assim que o teclado normal funciona. O ponto
+importante aqui é que **nenhuma lógica foi duplicada**: as teclas chamam
+exatamente as mesmas funções (`digitar`, `apagarUltimo`, `limparTudo`,
+`calcular`) que os botões de clique já usavam.
+
 ## 7. Como testar
 
 1. Abra `calculadora_base.html` no navegador e teste, por exemplo, `5 / 0`
