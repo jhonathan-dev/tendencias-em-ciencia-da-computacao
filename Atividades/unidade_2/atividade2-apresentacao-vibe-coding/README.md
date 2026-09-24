@@ -14,8 +14,7 @@
 
 | Arquivo | Descrição |
 |---|---|
-| [`Apresentacao_Vibe_Coding.pdf`](Apresentacao_Vibe_Coding.pdf) | Apresentação (17 slides) com as questões norteadoras, o estudo de caso e a síntese |
-| [`Apresentacao_Vibe_Coding.pptx`](Apresentacao_Vibe_Coding.pptx) | Mesma apresentação em PowerPoint, com notas do apresentador |
+| [`Apresentacao_Vibe_Coding.pptx`](Apresentacao_Vibe_Coding.pptx) | Apresentação em PowerPoint |
 | [`Resumo_Vibe_Coding_Jhonathan.docx`](Resumo_Vibe_Coding_Jhonathan.docx) | Resumo geral do texto em Word |
 | `README.md` | Este arquivo |
 
