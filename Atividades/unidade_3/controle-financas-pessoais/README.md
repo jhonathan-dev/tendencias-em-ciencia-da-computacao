@@ -4,7 +4,7 @@
 
 Projeto da disciplina — **Aula 10: Projeto Low Code / No Code / Vibecode — Desenvolvimento e Automação com Suporte de Inteligência Artificial**.
 
-🔗 **Acesse o protótipo:** `[cole aqui o link publicado do Lovable]`
+🔗 **Acesse o protótipo:** https://my-money-dear.lovable.app
 🎨 **Protótipo no Figma:** [MVC Finance – Figma](https://www.figma.com/design/aBj3lo8u5tlRiYIwI14mRD/MVC-finance?node-id=57-1074)
 
 ---
@@ -182,7 +182,7 @@ Seguindo a orientação de **nunca aceitar lógicas geradas por IA sem testar**,
 ## 🖼 10. Evidências do protótipo
 
 - **App publicado (Lovable):** `[link]`
-- **Protótipo (Figma):** [link do arquivo](https://www.figma.com/design/aBj3lo8u5tlRiYIwI14mRD/MVC-finance?node-id=57-1074)
+- **Protótipo (Figma):** [link do arquivo]([https://www.figma.com/design/aBj3lo8u5tlRiYIwI14mRD/MVC-finance?node-id=57-1074](https://github.com/jhonathan-dev/tendencias-em-ciencia-da-computacao/blob/main/Atividades/unidade_3/controle-financas-pessoais/docs/print/figma-dashboard.png))
 
 ### Figma × Lovable
 
